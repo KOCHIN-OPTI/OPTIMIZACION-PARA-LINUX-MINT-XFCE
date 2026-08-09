@@ -1,0 +1,21 @@
+sudo apt update && sudo apt install ethtool wireless-tools
+
+sudo ethtool -s enp2s0 speed 1000 duplex full autoneg on
+
+dependiendo el duplex de tu cable de ethernet o motherboard soporte
+
+Desactivar el ahorro de energía Green Ethernet (ASPM):
+
+sudo nano /etc/default/grub
+
+Busca la línea que empieza por GRUB_CMDLINE_LINUX_DEFAULT y añade pcie_aspm=off. Debería quedar algo así:
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mitigations=off pcie_aspm=off"
+
+Guarda (Ctrl+O, Enter, Ctrl+X) y actualiza el sistema de arranque:
+
+sudo update-grub
+
+reinicie la pc/laptop/notebook. Ya sea por interfaz o por el comando:
+
+reboot

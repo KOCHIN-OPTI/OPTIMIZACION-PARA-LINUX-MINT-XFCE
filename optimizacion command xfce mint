@@ -1,0 +1,137 @@
+configuracion por cristian linux para gaming linux mint (xfce-mate) 2026/07/26
+##########################################################################################################################################################################################################
+sudo dpkg --add-architecture i386
+sudo apt update && sudo apt upgrade -y
+sudo apt install mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386 libasound2-plugins-extra:i386 gnutls-bin:i386 -y
+sudo apt install mpv steam lutris micro ripgrep rsync curl vulkan-tools htop unrar unzip cpufrequtils zram-config -y
+sudo add-apt-repository ppa:kisak/kisak-mesa
+sudo apt update
+sudo apt dist-upgrade
+sudo apt update && sudo apt install cpufrequtils -y
+sudo nano /etc/default/cpufrequtils
+(Si el archivo está vacío, no te preocupes, es normal).
+Pega la siguiente línea adentro:
+
+GOVERNOR="performance"
+
+Guarda los cambios con Ctrl+O, presiona Enter y sal con Ctrl+X.
+
+Reinicia el servicio para asegurar que el sistema lo tome:
+sudo systemctl restart cpufrequtils
+
+como ver si tu procesador esta en performance: 
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+sudo apt update && sudo apt install zram-config -y
+sudo nano /etc/sysctl.conf
+vaya al final del todo y ponga estoy:
+ 
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+
+vm.swappiness= 60 es el predeterminado de linux 
+
+
+vm.vfs_cache_pressure = 50: Cuándo NO usar el valor 50 Si tu equipo tiene 2 GB o 4 GB de RAM, no se recomienda bajar este valor. Con tan poca memoria, necesitas que el sistema borre el caché lo más rápido posible (usando el valor 100 o incluso subiéndolo a 150) para dejarle espacio libre al juego en sí.
+
+"DDR3,DDR4,DDR5 / L "
+Si sumas 2 GB o 4 GB: Usa swappiness = 20
+Si sumas 6 GB o 8 GB: Usa swappiness = 10
+Si sumas 10 GB, 12 GB, 14 GB o 16 GB: Usa swappiness = 5 (o incluso 1)
+
+sin los "#"
+guarda con ctrl+o y sal con ctril+x
+
+Aplicar cambios y reiniciar Para que el servicio de compresión se levante correctamente y el kernel adopte el nuevo comportamiento, reinicia tu computadora:
+
+sudo reboot
+
+##########################################################################################################################################################################################################
+(kernel custom)
+
+"liquorix" pagina official: "https://liquorix.net/"
+
+commando de instalacion: curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash 
+
+"xanmod": pagina official: "https://xanmod.org/"
+
+commandos de instalacion:
+1. wget -qO - https://dl.xanmod.org/archive.key | sudo gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg
+
+2. echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/xanmod-release.list
+
+commando de version de kernel xanmod: porfavor use lo que sale en la foto del archivo o busque en la pagina official. El kernel que le corresponde a su procesador ya sea intel o amd
+
+sudo apt update && sudo apt install linux-xanmod-x64v2 -y
+sudo apt update && sudo apt install linux-xanmod-lts-x64v2 -y
+
+sudo apt update && sudo apt install linux-xanmod-x64v3 -y
+sudo apt update && sudo apt install linux-xanmod-lts-x64v3 -y
+
+sudo apt update && sudo apt install linux-xanmod-x64v4 -y
+
+
+Si es necesario, instale dependencias mínimas para construir módulos externos:
+sudo apt install --no-install-recommends dkms libelf-dev clang lld llvm
+
+4. Reboot. en la terminal o reinicie interfazmente.
+
+
+xanmod imagen en la carpeta que vino esta algo de los paso y los requisitos minimos para usar xanmod y su version de kernel "correspondiente": igual que liquorix.
+
+
+##########################################################################################################################################################################################################
+(Kernel generic de linux mint)
+Lista de Generaciones Intel y su Kernel Recomendado:
+    Intel Core 1ra y 2da Gen (Nehalem / Sandy Bridge - Ej: i3-2100)
+        Kernel Ideal: 5.15-generic a 6.1-generic (LTS)
+        Razón: Son arquitecturas muy antiguas. Los kernels modernos (6.5+) a veces rompen el soporte de sus controladores de video antiguos. Las ramas LTS aseguran compatibilidad sin pantallas negras.
+
+    Intel Core 3ra Gen (Ivy Bridge - Ej: i5-3210M)
+        Kernel Ideal: 6.2-generic o 6.5-generic
+        Razón: Introdujeron soporte parcial para Vulkan antiguo. Estas ramas contienen las últimas optimizaciones estables para su driver gráfico antes de que se consideraran obsoletos.
+
+    Intel Core 4ta y 5ta Gen (Haswell / Broadwell)
+        Kernel Ideal: 6.8-generic
+        Razón: Es la última rama de kernels que mantiene parches activos de rendimiento y estabilidad para el driver i915 y la compresión FBC de estas gráficas integradas.
+
+    Intel Core 6ta, 7ma y 8va Gen (Skylake / Kaby Lake / Coffee Lake - Ej: i7-7700HQ)
+        Kernel Ideal: 6.8-generic a 6.11-generic
+        Razón: Tienen soporte completo y moderno para Vulkan (gracias al driver Anv de Mesa). Los kernels superiores a 6.8 mejoran drásticamente la gestión de energía y los FPS en estos chips.
+
+    Intel Core 9na, 10ma y 11va Gen (Comet Lake / Ice Lake / Tiger Lake - Ej: i5-10300H)
+        Kernel Ideal: 6.11-generic o Kernel HWE (Hardware Enablement)
+        Razón: Introdujeron las gráficas Intel Iris Xe. Necesitan obligatoriamente kernels modernos para gestionar el escalado de frecuencias y exprimir la potencia gráfica en juegos modernos.
+
+    Intel Core 12va, 13va y 14va Gen en adelante (Alder Lake / Raptor Lake - Arquitectura Híbrida)
+        Kernel Ideal: 6.12-generic o superior (Kernel Linux moderno)
+        Razón: Tienen núcleos de rendimiento (P-Cores) y de eficiencia (E-Cores). Los kernels antiguos no entienden esta división y mandan los juegos a los núcleos lentos. Necesitas un kernel muy moderno para que el programador de tareas funcione bien.
+    
+
+Lista de Generaciones AMD y su Kernel Recomendado:
+        AMD Series A (A6, A8, A10, A12) y FX Antiguos (Ej: FX-8350)
+        Kernel Ideal: 5.15-generic a 6.1-generic (Ramas LTS)
+        Razón: Estas plataformas antiguas utilizan el driver de video obsoleto radeon. Los kernels modernos ya no añaden mejoras para ellos y, a veces, introducen problemas de estabilidad en placas base antiguas.
+
+        AMD Ryzen Serie 1000 y 2000 (Zen / Zen+ - Ej: Ryzen 5 1600 / 2600X)
+        Kernel Ideal: 6.2-generic a 6.5-generic
+        Razón: Fue el inicio de la arquitectura Zen. Estas versiones del kernel contienen el soporte definitivo, súper maduro y estable para el multihilo (SMT) y la administración de energía de estas primeras placas base AM4.
+
+        AMD Ryzen Serie 3000 y 4000 (Zen 2 - Ej: Ryzen 5 3600 / Ryzen 3 4300G)
+        Kernel Ideal: 6.8-generic
+        Razón: Es el punto perfecto. Estas CPUs obtienen una estabilidad total con las librerías gráficas de Mesa y aprovechan al máximo el driver amdgpu sin tirones. El kernel 6.8 exprime el rendimiento multihilo de esta generación al 100%.
+
+        AMD Ryzen Serie 5000 (Zen 3 - Ej: Ryzen 5 5600G / 5600X)
+        Kernel Ideal: 6.8-generic a 6.11-generic
+        Razón: En estas ramas se introdujo el driver moderno amd-pstate en modo activo. Esto reemplazó al viejo escalador de energía ACPI, permitiendo que las frecuencias de los Ryzen 5000 suban y bajen de forma milimétrica según lo pida el juego, otorgando más estabilidad y menos calor.
+
+        AMD Ryzen Serie 7000 y 8000 (Zen 4 - Ej: Ryzen 7 7800X3D / 8600G)
+        Kernel Ideal: 6.11-generic a 6.12-generic (o Kernel HWE de Mint)
+        Razón: Al ser la plataforma AM5 con memoria DDR5, requieren obligatoriamente kernels más modernos para gestionar correctamente el perfil de energía de los núcleos 3D V-Cache y el soporte nativo para los gráficos integrados RDNA3 (Radeon 780M/760M).
+
+        AMD Ryzen Serie 9000 e inferiores (Zen 5 en adelante - Ej: Ryzen 7 9700X)
+        Kernel Ideal: 7.1-generic o superior (Mainline / CachyOS)
+        Razón: Para los procesadores más nuevos con arquitecturas Zen 5, el kernel 7.1 es fundamental. Incluye optimizaciones críticas en el programador de tareas y el driver amd-pstate para cambiar automáticamente los perfiles energéticos si la PC está conectada a la corriente, desatando toda su potencia en gaming.
+        
+
+Si alguna vez cambias a una PC con un Ryzen moderno (Serie 7000 en adelante) en Linux Mint, no te quedes con el kernel por defecto. Puedes abrir el Gestor de Actualizaciones → Ver → Kernels de Linux, y activar el paquete HWE (Hardware Enablement), el cual te instalará automáticamente la rama más moderna disponible del kernel para que tu gráfica Radeon rinda al máximo.

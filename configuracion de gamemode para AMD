@@ -1,0 +1,28 @@
+Series Compatibles (APUs e iGPUs / Radeon RX RX 400, 500, Vega 56/64) hasta las modernas series RX 5000, 6000, 7000 y las arquitecturas más recientes (RDNA 3 y RDNA 4)
+
+instala gamemode: 
+sudo apt install gamemode -y
+
+Crear el archivo de configuración:
+mkdir -p ~/.config && nano ~/.config/gamemode.ini
+
+Abre la terminal y ejecuta este comando para crear el archivo en la ruta del sistema:
+sudo nano /etc/gamemode.ini
+
+"Pon tu contraseña"
+
+Pega la configuración completa:
+
+[general]
+renice=10
+
+[custom]
+start=cpupower frequency-set -g performance
+end=cpupower frequency-set -g powersave
+
+[gpu]
+gpu_vendor=amd
+apply_gpu_optimisations=accept-responsibility
+# Fuerza el modo de máximo rendimiento energético en el driver libre de AMD
+amd_performance_level=high
+

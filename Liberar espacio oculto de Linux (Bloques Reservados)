@@ -1,0 +1,23 @@
+QUÉ ES ESTO?
+Por defecto, los sistemas basados en Linux como es el caso linux mint reservan el 5% de la capacidad de cada partición formateada en Ext4 para el superusuario (root). 
+
+PARA QUÉ SIRVE ESTA RESERVA?
+1. Evitar la fragmentación del disco.
+2. Permitir que el sistema arranque y los servicios esenciales funcionen si el usuario común llena el disco al 100%.
+
+EL PROBLEMA EN DISCOS GRANDES:
+En un disco moderno de 500 GB o 1 TB, el 5% se traduce en 25 GB o 50 GB desperdiciados o inaccesibles para el usuario cotidiano.
+
+EL para tener ese porcentaje del disco desperdiciado:
+
+Para reducir esta reserva al 1% (un margen seguro para el sistema)
+se utiliza:
+
+sudo tune2fs -m 1 /dev/sda2
+
+(Donde '-m 1' es el nuevo porcentaje y '/dev/sda2' es la partición a modificar).
+
+RECOMENDACIÓN DE SEGURIDAD!!
+- Partición del sistema (/): Dejarla al 1% como colchón de emergencia.
+- Partición de datos secundaria (Home separada o disco externo): Se puede bajar con seguridad al 0% (-m 0).
+
