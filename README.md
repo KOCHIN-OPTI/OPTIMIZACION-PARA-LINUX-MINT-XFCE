@@ -127,6 +127,44 @@ Todo esto pensado especialmente para **equipos de bajos recursos** como: (Intel 
 
 ---
 
+CONFIG SEGÚN EL USUARIO:
+------------------------------
+## 🧠 1. Configuración según la Memoria RAM (Single vs. Dual-Channel)
+El script calcula automáticamente los valores de Swappiness, pero el usuario debe tomar decisiones clave al momento de las preguntas:
+
+* Si tienes DUAL-CHANNEL (2 módulos de RAM):
+* ZRAM (Paso 3): Dile que SÍ (s). El script usará el algoritmo zstd, el cual requiere el ancho de banda del canal dual para comprimir y descomprimir los datos a toda velocidad sin ahogar al procesador.
+* Si tienes SINGLE-CHANNEL (1 solo módulo de RAM):
+* ZRAM (Paso 3): Dile que SÍ (s). El script inteligentemente usará lz4, un algoritmo extremadamente liviano que no satura el único bus de datos disponible.
+   * Governor de CPU (Paso 6): Si tienes una laptop i3/i5 con un solo módulo de RAM, considera decirle que NO (n) a forzar el modo performance constante si notas tirones, ya que el ancho de banda limitado de la RAM y el calor compartido pueden generar estrangulamiento térmico (throttling).
+
+------------------------------
+## 💾 2. Configuración según el tipo de Disco (SATA, NVMe o HDD)
+El script cuenta con un menú renovado en el Paso 9 (Disco / EXT4) que cambia según lo que detecte:
+
+* Si el script detecta: SSD (Tu caso exacto: SATA /dev/sda):
+* ¿Fijar el scheduler a 'none'? Dile que NO (n). Los SSD por interfaz SATA tienen una sola cola de peticiones; dejarlo en none obliga al procesador a ordenar las lecturas pesadas de los juegos, provocando pérdidas de FPS.
+   * ¿Activar fstrim.timer? Dile que SÍ (s). Es vital para mantener la salud y velocidad del SSD.
+* Si el script detecta: NVMe (Discos ultrarrápidos M.2 PCIe):
+* Menú de Scheduler: Elige la opción 2 (kyber). Kyber es un planificador moderno que prioriza las operaciones de lectura en videojuegos (carga de texturas rápidas), bajando la latencia drásticamente. Evita elegir none si usas el sistema para jugar.
+   * ¿Activar fstrim.timer? Dile que SÍ (s).
+* Si el script detecta: HDD (Discos mecánicos tradicionales):
+* ¿Fijar el scheduler a 'bfq'? Dile que SÍ (s). BFQ evita que el sistema operativo se congele por completo si un juego o una descarga en segundo plano se pone a leer o escribir datos de forma masiva en el disco.
+
+------------------------------
+## 🔄 3. El dilema de la Swap y la Hibernación (Paso 4)
+El script calcula un tamaño de archivo de intercambio proporcional a tu RAM (2GB o 4GB).
+
+* ¿Crear swapfile de respaldo detrás de ZRAM?
+* Dile que SÍ (s) si tu máquina tiene 4GB u 8GB de RAM. Servirá como una red de seguridad. Si un juego se excede y llena la ZRAM, el sistema volcará el exceso al disco en lugar de cerrar el juego por falta de memoria (Crash).
+   * Dile que NO (n) únicamente si tienes 16GB de RAM o más, ya que con esa cantidad la ZRAM por sí sola es más que suficiente y jamás tocarás el disco.
+* ¿Desactivar hibernación?
+* Dile que SÍ (s) siempre. En sistemas enfocados a juegos con almacenamiento SSD, la hibernación no aporta ventajas reales y suele generar errores de lectura al despertar el sistema operativo.
+
+------------------------------
+
+
+
 ## Notas generales
 
 - **Todo lo que edita archivos del sistema hace backup primero** (`/root/mint-optimizer-auto-backups/<fecha>/`), así que cualquier cambio es reversible manualmente restaurando el archivo original.
