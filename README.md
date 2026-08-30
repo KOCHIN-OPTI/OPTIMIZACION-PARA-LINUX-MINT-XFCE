@@ -13,8 +13,6 @@
 
 Todo esto pensado especialmente para **equipos de bajos recursos** como: (Intel Core i3-4025U, Celeron N4020, similares hasta las cpu actuales...), sin que el usuario tenga que tocar configuraciones manualmente.
 
-El script de optimizacion tiene dos diseño uno al estilo identico a platinum-optimizer. O el basico que es más rapido de aplicar las opciones aplicadas....
-
 > # KOCHIN-OPTILINUX — Documentación de Parametros aplicados:
 ## 1. Kernel
 
